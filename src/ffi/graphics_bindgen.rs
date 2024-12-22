@@ -338,9 +338,7 @@ unsafe extern "C" {
     );
     pub fn sfRenderWindow_close(renderWindow: *mut sfRenderWindow);
     pub fn sfRenderWindow_isOpen(renderWindow: *const sfRenderWindow) -> bool;
-    pub fn sfRenderWindow_getSettings(
-        renderWindow: *const sfRenderWindow,
-    ) -> *const sfContextSettings;
+    pub fn sfRenderWindow_getSettings(renderWindow: *const sfRenderWindow) -> sfContextSettings;
     pub fn sfRenderWindow_pollEvent(renderWindow: *mut sfRenderWindow, event: *mut sfEvent)
         -> bool;
     pub fn sfRenderWindow_waitEvent(renderWindow: *mut sfRenderWindow, event: *mut sfEvent)

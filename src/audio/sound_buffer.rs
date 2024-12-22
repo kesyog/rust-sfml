@@ -50,7 +50,7 @@ pub SoundBuffer;
 impl SoundBuffer {
     /// Creates a new (empty) `SoundBuffer`.
     pub fn new() -> SfResult<FBox<Self>> {
-        FBox::new(unsafe { ffi::audio::sfSoundBuffer_create() }).into_sf_result()
+        unimplemented!("nope");
     }
     /// Creates a new `SoundBuffer` from a file.
     ///

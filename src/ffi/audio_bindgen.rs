@@ -153,7 +153,6 @@ unsafe extern "C" {
     pub fn sfSound_getAttenuation(sound: *const sfSound) -> f32;
     pub fn sfSound_getPlayingOffset(sound: *const sfSound) -> i64;
     // SoundBuffer.cpp
-    pub fn sfSoundBuffer_create() -> *mut sfSoundBuffer;
     pub fn sfSoundBuffer_destroy(soundBuffer: *mut sfSoundBuffer);
     pub fn sfSoundBuffer_cpy(soundBuffer: *const sfSoundBuffer) -> *mut sfSoundBuffer;
     pub fn sfSoundBuffer_createFromFile(filename: *const c_char) -> *mut sfSoundBuffer;

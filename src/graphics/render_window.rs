@@ -174,8 +174,8 @@ impl RenderWindow {
     ///
     /// Return a structure containing the OpenGL context settings
     #[must_use]
-    pub fn settings(&self) -> &ContextSettings {
-        unsafe { &*ffi::sfRenderWindow_getSettings(self) }
+    pub fn settings(&self) -> ContextSettings {
+        unsafe { ffi::sfRenderWindow_getSettings(self) }
     }
 
     /// Tell if the render texture will use sRGB encoding when drawing it
@@ -459,14 +459,14 @@ impl RenderTarget for RenderWindow {
     fn draw_with_renderstates(&mut self, object: &dyn Drawable, render_states: &RenderStates) {
         object.draw(self, render_states);
     }
-    fn draw_text(&mut self, text: &Text, render_states: &RenderStates) {
-        unsafe { ffi::sfRenderWindow_drawText(self, text.raw(), render_states) }
+    fn draw_text(&mut self, text: &Text, _render_states: &RenderStates) {
+        unsafe { ffi::sfRenderWindow_drawText(self, text.raw(), std::ptr::null()) }
     }
     fn draw_rc_text(&mut self, text: &RcText, render_states: &RenderStates) {
         unsafe { ffi::sfRenderWindow_drawText(self, text.raw(), render_states) }
     }
-    fn draw_shape(&mut self, shape: &CustomShape, render_states: &RenderStates) {
-        unsafe { ffi::sfRenderWindow_drawShape(self, shape.raw().cast(), render_states) }
+    fn draw_shape(&mut self, shape: &CustomShape, _render_states: &RenderStates) {
+        unsafe { ffi::sfRenderWindow_drawShape(self, shape.raw().cast(), std::ptr::null()) }
     }
     fn draw_sprite(&mut self, sprite: &Sprite, render_states: &RenderStates) {
         unsafe { ffi::sfRenderWindow_drawSprite(self, sprite.raw(), render_states) }
@@ -474,16 +474,16 @@ impl RenderTarget for RenderWindow {
     fn draw_rc_sprite(&mut self, sprite: &RcSprite, render_states: &RenderStates) {
         unsafe { ffi::sfRenderWindow_drawSprite(self, sprite.raw(), render_states) }
     }
-    fn draw_circle_shape(&mut self, circle_shape: &CircleShape, render_states: &RenderStates) {
-        unsafe { ffi::sfRenderWindow_drawCircleShape(self, circle_shape.raw(), render_states) }
+    fn draw_circle_shape(&mut self, circle_shape: &CircleShape, _render_states: &RenderStates) {
+        unsafe { ffi::sfRenderWindow_drawCircleShape(self, circle_shape.raw(), std::ptr::null()) }
     }
     fn draw_rectangle_shape(
         &mut self,
         rectangle_shape: &RectangleShape,
-        render_states: &RenderStates,
+        _render_states: &RenderStates,
     ) {
         unsafe {
-            ffi::sfRenderWindow_drawRectangleShape(self, rectangle_shape.raw(), render_states)
+            ffi::sfRenderWindow_drawRectangleShape(self, rectangle_shape.raw(), std::ptr::null())
         }
     }
     fn draw_convex_shape(&mut self, convex_shape: &ConvexShape, render_states: &RenderStates) {
