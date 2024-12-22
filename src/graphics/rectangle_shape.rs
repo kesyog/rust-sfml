@@ -28,7 +28,7 @@ impl<'s> RectangleShape<'s> {
     /// Panics if a `RectangleShape` can't be created for some reason.
     #[must_use]
     pub fn new() -> RectangleShape<'s> {
-        let rectangle = unsafe { ffi::sfRectangleShape_new() };
+        let rectangle = unsafe { ffi::sfRectangleShape_create() };
         RectangleShape {
             handle: NonNull::new(rectangle).expect("Failed to create RectangleShape"),
             texture: PhantomData,
@@ -199,6 +199,6 @@ impl<'s> Clone for RectangleShape<'s> {
 
 impl Drop for RectangleShape<'_> {
     fn drop(&mut self) {
-        unsafe { ffi::sfRectangleShape_del(self.handle.as_ptr()) }
+        unsafe { ffi::sfRectangleShape_destroy(self.handle.as_ptr()) }
     }
 }

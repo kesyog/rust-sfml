@@ -77,7 +77,7 @@ impl<'s> CircleShape<'s> {
 
 impl Default for CircleShape<'_> {
     fn default() -> Self {
-        let circle = unsafe { ffi::sfCircleShape_new() };
+        let circle = unsafe { ffi::sfCircleShape_create() };
         CircleShape {
             handle: NonNull::new(circle).expect("Failed to create CircleShape"),
             texture: PhantomData,
@@ -201,6 +201,6 @@ impl<'s> Clone for CircleShape<'s> {
 
 impl Drop for CircleShape<'_> {
     fn drop(&mut self) {
-        unsafe { ffi::sfCircleShape_del(self.handle.as_ptr()) }
+        unsafe { ffi::sfCircleShape_destroy(self.handle.as_ptr()) }
     }
 }

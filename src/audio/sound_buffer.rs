@@ -50,15 +50,13 @@ pub SoundBuffer;
 impl SoundBuffer {
     /// Creates a new (empty) `SoundBuffer`.
     pub fn new() -> SfResult<FBox<Self>> {
-        FBox::new(unsafe { ffi::audio::sfSoundBuffer_new() }).into_sf_result()
+        FBox::new(unsafe { ffi::audio::sfSoundBuffer_create() }).into_sf_result()
     }
     /// Creates a new `SoundBuffer` from a file.
     ///
     /// See [`Self::load_from_file`].
     pub fn from_file(filename: &str) -> SfResult<FBox<Self>> {
-        let mut new = Self::new()?;
-        new.load_from_file(filename)?;
-        Ok(new)
+        Self::load_from_file(filename)
     }
     /// Creates a new `SoundBuffer` from a file in memory.
     ///
@@ -96,9 +94,11 @@ impl SoundBuffer {
     ///
     /// # Arguments
     /// * filename - Path of the sound file to load
-    pub fn load_from_file(&mut self, filename: &str) -> SfResult<()> {
+    pub fn load_from_file(filename: &str) -> SfResult<FBox<Self>> {
         let c_str = CString::new(filename)?;
-        unsafe { ffi::audio::sfSoundBuffer_loadFromFile(self, c_str.as_ptr()) }.into_sf_result()
+
+        FBox::new(unsafe { ffi::audio::sfSoundBuffer_createFromFile(c_str.as_ptr()) })
+            .into_sf_result()
     }
     /// Load the sound buffer from a file in memory.
     pub fn load_from_memory(&mut self, data: &[u8]) -> SfResult<()> {
@@ -219,7 +219,7 @@ impl ToOwned for SoundBuffer {
 impl Drop for SoundBuffer {
     fn drop(&mut self) {
         unsafe {
-            ffi::audio::sfSoundBuffer_del(self);
+            ffi::audio::sfSoundBuffer_destroy(self);
         }
     }
 }

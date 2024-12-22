@@ -26,7 +26,7 @@ decl_opaque! {
 impl Drop for Clock {
     fn drop(&mut self) {
         unsafe {
-            ffi::sfClock_delete(self);
+            ffi::sfClock_destroy(self);
         }
     }
 }
@@ -34,7 +34,7 @@ impl Drop for Clock {
 impl Clock {
     /// Creates a new Clock and starts it automatically.
     pub fn start() -> SfResult<FBox<Self>> {
-        unsafe { FBox::new(ffi::sfClock_new()) }.into_sf_result()
+        unsafe { FBox::new(ffi::sfClock_create()) }.into_sf_result()
     }
 
     /// Gets the elapsed time.

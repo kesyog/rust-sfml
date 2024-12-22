@@ -51,7 +51,7 @@ impl<'buf> Sound<'buf> {
     /// Panics on allocation failure
     #[must_use]
     pub fn new() -> Self {
-        let s = unsafe { ffi::audio::sfSound_new() };
+        let s = unsafe { ffi::audio::sfSound_create() };
         Sound {
             handle: NonNull::new(s).expect("Failed to create Sound"),
             buffer: PhantomData,
@@ -217,7 +217,7 @@ impl SoundSource for Sound<'_> {
 impl Drop for Sound<'_> {
     fn drop(&mut self) {
         unsafe {
-            ffi::audio::sfSound_del(self.handle.as_ptr());
+            ffi::audio::sfSound_destroy(self.handle.as_ptr());
         }
     }
 }

@@ -312,7 +312,7 @@ impl RcText {
 
 impl Default for RcText {
     fn default() -> Self {
-        let text = unsafe { ffi::sfText_new() };
+        let text = unsafe { ffi::sfText_create() };
         Self {
             handle: NonNull::new(text).expect("Failed to create Text"),
             font: Weak::new(),
@@ -488,7 +488,7 @@ impl Transformable for RcText {
 impl Drop for RcText {
     fn drop(&mut self) {
         unsafe {
-            ffi::sfText_del(self.handle.as_ptr());
+            ffi::sfText_destroy(self.handle.as_ptr());
         }
     }
 }

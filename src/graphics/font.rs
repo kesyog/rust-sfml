@@ -61,15 +61,13 @@ pub Font;
 impl Font {
     /// Creates a new (empty) font.
     pub fn new() -> SfResult<FBox<Self>> {
-        FBox::new(unsafe { ffi::sfFont_new() }).into_sf_result()
+        FBox::new(unsafe { ffi::sfFont_create() }).into_sf_result()
     }
     /// Creates a new `Font` from a file on the filesystem.
     ///
     /// See [`Self::load_from_file`].
     pub fn from_file(path: &str) -> SfResult<FBox<Self>> {
-        let mut new = Self::new()?;
-        new.load_from_file(path)?;
-        Ok(new)
+        Self::load_from_file(path)
     }
     /// Creates a new `Font` from font file data in memory.
     ///
@@ -130,9 +128,9 @@ impl Font {
     ///     }
     /// };
     /// ```
-    pub fn load_from_file(&mut self, path: &str) -> SfResult<()> {
+    pub fn load_from_file(path: &str) -> SfResult<FBox<Self>> {
         let c_str = CString::new(path)?;
-        unsafe { ffi::sfFont_loadFromFile(self, c_str.as_ptr()) }.into_sf_result()
+        FBox::new(unsafe { ffi::sfFont_createFromFile(c_str.as_ptr()) }).into_sf_result()
     }
 
     /// Load the font from a custom stream.
@@ -361,7 +359,7 @@ impl ToOwned for Font {
 
 impl Drop for Font {
     fn drop(&mut self) {
-        unsafe { ffi::sfFont_del(self) }
+        unsafe { ffi::sfFont_destroy(self) }
     }
 }
 

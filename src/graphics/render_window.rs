@@ -52,7 +52,7 @@ impl RenderWindow {
 
         title.with_as_sfstr(|sfstr| {
             let ptr = unsafe {
-                ffi::sfRenderWindow_new_mtss(mode.into(), sfstr.as_ptr(), style.bits(), settings)
+                ffi::sfRenderWindow_create(mode.into(), sfstr.as_ptr(), style.bits(), settings)
             };
             FBox::new(ptr).ok_or(SfError::CallFailed)
         })
@@ -436,16 +436,16 @@ impl RenderTarget for RenderWindow {
         unsafe { &*(ffi::sfRenderWindow_getDefaultView(self)) }
     }
     fn map_pixel_to_coords(&self, point: Vector2i, view: &View) -> Vector2f {
-        unsafe { ffi::sfRenderWindow_mapPixelToCoords_View(self, point, view) }
+        unsafe { ffi::sfRenderWindow_mapPixelToCoords(self, point, view) }
     }
     fn map_pixel_to_coords_current_view(&self, point: Vector2i) -> Vector2f {
-        unsafe { ffi::sfRenderWindow_mapPixelToCoords(self, point) }
+        unsafe { ffi::sfRenderWindow_mapPixelToCoords(self, point, self.view()) }
     }
     fn map_coords_to_pixel(&self, point: Vector2f, view: &View) -> Vector2i {
-        unsafe { ffi::sfRenderWindow_mapCoordsToPixel_View(self, point, view) }
+        unsafe { ffi::sfRenderWindow_mapCoordsToPixel(self, point, view) }
     }
     fn map_coords_to_pixel_current_view(&self, point: Vector2f) -> Vector2i {
-        unsafe { ffi::sfRenderWindow_mapCoordsToPixel(self, point) }
+        unsafe { ffi::sfRenderWindow_mapCoordsToPixel(self, point, self.view()) }
     }
     fn viewport(&self, view: &View) -> IntRect {
         unsafe { ffi::sfRenderWindow_getViewport(self, view) }
@@ -511,7 +511,7 @@ impl RenderTarget for RenderWindow {
 impl Drop for RenderWindow {
     fn drop(&mut self) {
         unsafe {
-            ffi::sfRenderWindow_del(self);
+            ffi::sfRenderWindow_destroy(self);
         }
     }
 }
